@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Docs - GameSheild</title>
+		<link rel="stylesheet" href="/style.css" />
+		<link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+	</head>
+	<body> 
+		<main>
+			<section class="hero">
+				<h1>GuardSheild</h1>
+				<p>A chrome extension that auto detects games and blocks them</p>
+				<a href="https://github.com/mas0ng/GameShield" class="btn">Open On GitHub</a>
+			</section>
+			
+			<section class="markdown">
+				<div id="content">
+          <!-- Markdown content will be rendered here -->
+				</div>
+			</section>
+
+		<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+		<script>
+			fetch('docs.md')
+			.then(response => response.text())
+			.then(text => {
+				document.getElementById('content').innerHTML = marked.parse(text);
+			})
+			.catch(error => console.error('Error loading markdown:', error));
+		</script>
+		</main>
+	</body>
+</html>
