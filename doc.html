@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- The title will be updated dynamically based on the project name -->
+    <title>Project Docs</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+  </head>
+  <body>
+    <main>
+      <section class="hero">
+        <!-- These elements will be populated dynamically -->
+        <h1 id="project-title">Loading...</h1>
+        <p id="project-description"></p>
+        <a id="github-link" href="#" class="btn">Open On GitHub</a>
+      </section>
+
+      <section class="markdown">
+        <div id="content">
+          <!-- Markdown content will be rendered here -->
+        </div>
+      </section>
+    </main>
+
+    <!-- Include the Marked library for Markdown parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+      // Utility function to get a query parameter by name
+      function getQueryParam(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+      }
+
+      // Retrieve the project reference from the URL (e.g., ?ref=GameShield)
+      const projectRef = getQueryParam('ref');
+
+      // Redirect to the 404 page if no ref parameter is provided
+      if (!projectRef) {
+        window.location.href = 'https://docs.mas0ng.com/404';
+      } else {
+        // Fetch the JSON file containing project data
+        fetch('projects.json')
+          .then(response => response.json())
+          .then(data => {
+            // Find the project whose name matches the provided reference (case insensitive)
+            const project = data.find(item => item.name.toLowerCase() === projectRef.toLowerCase());
+            
+            // If the project is not found, redirect to the 404 page
+            if (!project) {
+              window.location.href = 'https://docs.mas0ng.com/404';
+              return;
+            }
+
+            // Update the page with the project's data
+            document.title = `Docs - ${project.name}`;
+            document.getElementById('project-title').innerText = project.name;
+            document.getElementById('project-description').innerText = project.description;
+            document.getElementById('github-link').href = project.github;
+
+            // Load the project's Markdown documentation using the docs link from JSON
+            fetch(project.docs)
+              .then(response => response.text())
+              .then(text => {
+                document.getElementById('content').innerHTML = marked.parse(text);
+              })
+              .catch(error => {
+                console.error('Error loading markdown:', error);
+                document.getElementById('content').innerHTML = '<p>Error loading documentation.</p>';
+              });
+          })
+          .catch(error => {
+            console.error('Error loading project data:', error);
+            // Optionally, you could also redirect on JSON load errors:
+            window.location.href = 'https://docs.mas0ng.com/404';
+          });
+      }
+    </script>
+  </body>
+</html>
