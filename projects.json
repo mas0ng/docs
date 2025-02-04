@@ -6,9 +6,9 @@
     "description": "A chrome extension that auto detects games and blocks them."
   },
   {
-    "name": "AnotherProject",
-    "docs": "another-docs.md",
-    "github": "https://github.com/example/AnotherProject",
-    "description": "Another awesome project description goes here."
+    "name": "QRCG",
+    "docs": "/docs/QRCG.md",
+    "github": "https://github.com/mas0ng/QRCG/",
+    "description": "Chrome extension that generates a QR code for the current page URL."
   }
 ]
